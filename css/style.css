@@ -3,10 +3,11 @@
 /* La feuille du navigateur a déjà fixé le panneau à l'écran
    (position: fixed; inset: 0) : on l'étire, sans positionner. */
 .menu {
-  width: 100%;
-  height: 100%;
-  border: 0;
+  width: 100%; /* largeur : 100% du parent */
+  height: 100%; /* hauteur : 100% du parent */
+  border: 0; /* pas de bord */
 }
+
 
 /* Page figée tant que le menu est ouvert.
    :has() — extrait fourni : seul moyen, en CSS, de faire remonter l'état
@@ -16,20 +17,29 @@ html:has(.menu:popover-open) {
 }
 
 /* --- burger ---------------------------- */
+/*La propriété CSS `cursor` permet de changer l'apparence du curseur.*/
 .burger {
   cursor: pointer;
 }
 
+/* Fondu : transition de 400ms sur toutes les propriétés.
+     allow-discrete autorise aussi la transition des propriétés « discrètes »
+     comme display, qui passe de none à block sans valeur intermédiaire. */
 .menu {
   /* … on complète le bloc existant … */
   transition: 400ms allow-discrete;
   opacity: 0;
 }
 
+/* Quand le popover est ouvert, l'opacité passe progressivement à 1
+   grâce à la transition définie ci-dessus. */
 .menu:popover-open {
   opacity: 1;
 }
 
+/* @starting-style : valeur de départ de l'animation à l'ouverture.
+   Sans cette règle, il n'y aurait pas d'animation, car le menu
+   était en display: none juste avant. */
 @starting-style {
   .menu:popover-open {
     opacity: 0;
@@ -42,11 +52,16 @@ html:has(.menu:popover-open) {
   }
 }
 
+/* Rotation du bouton de fermeture quand le menu (parent) est ouvert.
+   Sélecteur par imbrication : parent / enfant. */
 .menu:popover-open .burger--close {
   transform: rotate(90deg);
   transition: 400ms;
 }
 
+/* Si l'utilisateur a demandé à réduire les animations dans son système,
+   on désactive les transitions. La virgule regroupe deux sélecteurs
+   dans la même règle. */
 @media (prefers-reduced-motion: reduce) {
   .menu,
   .menu .burger--close {
